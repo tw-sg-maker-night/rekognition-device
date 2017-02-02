@@ -1,0 +1,23 @@
+{
+  "name": "rekognition-webcam",
+  "version": "1.0.0",
+  "description": "uses webcam to detect faces and compare it with AWS Rekognition",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git"
+  },
+  "keywords": [
+    "webcam",
+    "aws",
+    "rekognition"
+  ],
+  "author": "Niko Wah",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.14.1"
+  }
+}
