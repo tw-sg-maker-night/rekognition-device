@@ -53,6 +53,4 @@ Doesn't seem like there's a way to do it via the AWS Management (or maybe I can'
     ```
 
 ## Notes
-CollectionArn: aws:rekognition:us-east-1:623790533772:collection/rekognition-people
-
 AWS BUCKET: rekognition-people
