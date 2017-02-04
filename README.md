@@ -12,6 +12,7 @@
   //fixed settings
   AWS_REGION=us-east-1
   AWS_COLLECTION_ID=rekognition-people
+  AWS_BUCKET=rekognition-people
   SIMILARITY_THRESHOLD=75
 
   LOCAL_DIRECTORY=/path/to/your/file/dir
@@ -42,9 +43,9 @@ Doesn't seem like there's a way to do it via the AWS Management (or maybe I can'
     ```
     aws rekognition index-faces \
     --image '{"S3Object":{"Bucket":"rekognition-people","Name":"Donnie-Yen.jpeg"}}' \
-    --collection-id "rekognition-people"
+    --collection-id "rekognition-people" \
+    --external-image-id "Donnie-Yen.jpeg"
     ```
-
 5. Delete Faces from collection
     ```
     aws rekognition delete-faces \
