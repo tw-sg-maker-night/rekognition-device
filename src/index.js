@@ -15,31 +15,16 @@ const rekognition = new AWS.Rekognition();
 const s3 = new AWS.S3();
 
 app.get('/', (req, res) => {
-  findAMatchInAwsFaces(getSourceImage());
+  findAMatchInAwsFaces(getSourceImage()).then(function(match) {
+    return getDataFromMatch(match);
+  }).then(function(data) {
+    actions(data);
+  }).catch(function(err) {
+    console.log(err);
+  });
 });
 
 app.listen(port);
-
-function findAMatchInAwsFaces(sourceImage) {
-  let params = {
-    CollectionId: collectionId,
-    Image: {
-      Bytes: new Buffer(sourceImage, 'base64')
-    },
-    FaceMatchThreshold: similarityThreshold,
-    MaxFaces: 1
-  };
-
-  rekognition.searchFacesByImage(params, function(err, data) {
-    if (err) console.log(err, err.stack);
-    else {
-      if(data.FaceMatches.length>0)
-        processMatch(data.FaceMatches[0].Face);
-      else
-        console.log('No Match Found');
-    }
-  });
-}
 
 function getSourceImage(){
   return fs.readFileSync(
@@ -51,16 +36,40 @@ function getSourceImage(){
   );
 }
 
-function processMatch(matched){
-  let params = {
-    Bucket: bucketName,
-    Key: matched.ExternalImageId
-  };
-  s3.headObject(params, function(err, data) {
-    if (err) console.log(err, err.stack);
-    else {
-      actions(data.Metadata);
-    }
+function findAMatchInAwsFaces(sourceImage) {
+  return new Promise(function(resolve, reject){
+    let params = {
+      CollectionId: collectionId,
+      Image: {
+        Bytes: new Buffer(sourceImage, 'base64')
+      },
+      FaceMatchThreshold: similarityThreshold,
+      MaxFaces: 1
+    };
+
+    rekognition.searchFacesByImage(params, function(err, data) {
+      if (err) reject(err);
+      else {
+        if(data.FaceMatches.length>0)
+          resolve(data.FaceMatches[0].Face);
+        else
+          reject('No Match Found');
+      }
+    });
+  });
+}
+
+function getDataFromMatch(matched){
+  return new Promise(function(resolve, reject){
+    let params = {
+      Bucket: bucketName,
+      Key: matched.ExternalImageId
+    };
+
+    s3.headObject(params, function(err, data) {
+      if (err) reject(err);
+      else resolve(data.Metadata);
+    });
   });
 }
 
