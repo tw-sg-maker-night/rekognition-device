@@ -29,13 +29,13 @@ Doesn't seem like there's a way to do it via the AWS Management (or maybe I can'
 
 0. Upload your image to S3 bucket: `rekognition-people`
 1. List collections
-```
-  aws rekognition list-collections
-```
+    ```
+    	aws rekognition list-collections
+    ```
 2. (If no collection found) Create a collection
-```
-  aws rekognition create-collection --collection-id "rekognition-people"
-```
+    ```
+      aws rekognition create-collection --collection-id "rekognition-people"
+    ```
 3. List faces
 ```
   aws rekognition list-faces --collection-id rekognition-people
