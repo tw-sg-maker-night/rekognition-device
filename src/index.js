@@ -28,7 +28,7 @@ app.listen(port);
 
 function getSourceImage(){
   return fs.readFileSync(
-    localDirectory + 'angelina-jolie2.jpeg', 'base64',
+    localDirectory + 'img.jpeg', 'base64',
     function (err,data) {
       if (err) console.log(err);
       else return data;
