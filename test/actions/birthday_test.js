@@ -25,6 +25,8 @@ describe("Birthday", function() {
   });
 
   describe("getBirthdaySong", function() {
-
+    it("return customized birthday song", function(){
+      
+    });
   });
 });
