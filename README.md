@@ -1,12 +1,14 @@
 # AWS Rekognition with Webcam?
 
 1. [ ] Input image source: Maybe using Raspberry pi with webcam and motion sensor to capture faces
-  * **Comparison cost money**. Need a effective way to cut api call by detection of human. Else Moneyman will come after us. *Ahhh...*
+  * **Comparison cost money.** (Based on the total target images used in matching)
+  * Need an effective way to cut api call by detection of human. Else Moneyman will come after us. *Ahhh...*
 2. [x] Compare source image with our people in our S3 bucket `rekognition-people`
-3. [x] If match, fetch person data from image
+3. [x] If match, fetch person data from image metadata
 4. Do something:
   * [ ] Maybe play a entrance song?
-  * [ ] Maybe sing a birthday song if it's their bday?
+  * [x] Maybe sing a birthday song if it's their bday?
+5. [ ] Pass Response from Step 4 to something(Polly?) and vocalise response
 
 ## Some environment variables you may need
 ```
