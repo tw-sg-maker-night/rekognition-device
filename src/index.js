@@ -2,6 +2,7 @@ require('dotenv').config();
 const Express = require('express');
 const AWS = require('aws-sdk');
 const fs = require('fs');
+const Birthday = require('../src/actions/birthday');
 const app = Express();
 
 const port = process.env.PORT || 3000;
@@ -74,9 +75,10 @@ function getDataFromMatch(matched){
 }
 
 function actions(data) {
-  playBirthdaySong(data.birthday);
+  singBirthdaySongOnBirthday(data.name, data.birthday);
 }
 
-function playBirthdaySong(birthday){
-  console.log(birthday);
+function singBirthdaySongOnBirthday(name, birthday){
+  let response = new Birthday().action(name, birthday);
+  if(response !== null) console.log(response);
 }
