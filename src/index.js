@@ -4,6 +4,7 @@ const AWS = require('aws-sdk');
 const fs = require('fs');
 const Birthday = require('../src/actions/birthday');
 const app = Express();
+const chokidar = require('chokidar');
 
 const port = process.env.PORT || 3000;
 const collectionId = process.env.AWS_COLLECTION_ID;
@@ -15,8 +16,12 @@ AWS.config.update({region: process.env.AWS_REGION});
 const rekognition = new AWS.Rekognition();
 const s3 = new AWS.S3();
 
-app.get('/', (req, res) => {
-  findAMatchInAwsFaces(getSourceImage()).then(function(match) {
+const fileWatcher = chokidar.watch(localDirectory, {
+  ignoreInitial: true
+});
+
+fileWatcher.on('add', function(filePath) {
+  findAMatchInAwsFaces(getSourceImage(filePath)).then(function(match) {
     return getDataFromMatch(match);
   }).then(function(data) {
     actions(data);
@@ -27,9 +32,9 @@ app.get('/', (req, res) => {
 
 app.listen(port);
 
-function getSourceImage(){
+function getSourceImage(filePath){
   return fs.readFileSync(
-    localDirectory + 'img.jpeg', 'base64',
+    filePath, 'base64',
     function (err,data) {
       if (err) console.log(err);
       else return data;
