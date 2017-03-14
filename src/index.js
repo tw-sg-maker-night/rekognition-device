@@ -1,8 +1,10 @@
 require('dotenv').config();
 const AWS = require('aws-sdk');
 const fs = require('fs');
-const Birthday = require('../src/actions/birthday');
 const chokidar = require('chokidar');
+
+const Polly = require('../src/polly');
+const Birthday = require('../src/actions/birthday');
 
 const port = process.env.PORT || 3000;
 const collectionId = process.env.AWS_COLLECTION_ID;
@@ -78,10 +80,16 @@ function getDataFromMatch(matched){
 }
 
 function actions(data) {
-  singBirthdaySongOnBirthday(data.name, data.birthday);
+  sing(birthdaySongOnBirthday(data.name, data.birthday));
 }
 
-function singBirthdaySongOnBirthday(name, birthday){
-  let response = new Birthday().action(name, birthday);
-  if(response !== null) console.log(response);
+function sing(response){
+  if(response !== null) {
+    new Polly().speak(response);
+    console.log('singing: ' + response);
+  }
+}
+
+function birthdaySongOnBirthday(name, birthday){
+  return new Birthday().action(name, birthday);
 }
