@@ -1,14 +1,22 @@
-# AWS Rekognition with Webcam?
+# AWS Rekognition with Webcam
 
-1. [ ] Input image source: Maybe using Raspberry pi with webcam and motion sensor to capture faces
+## Input image source via some device
+1. [x] Input image source: Maybe using Raspberry pi with webcam and motion sensor to capture faces
+  * **This will be a separate python script**
   * **Comparison cost money.** (Based on the total target images used in matching)
   * Need an effective way to cut api call by detection of human. Else Moneyman will come after us. *Ahhh...*
-2. [x] Compare source image with our people in our S3 bucket `rekognition-people`
-3. [x] If match, fetch person data from image metadata
-4. Do something:
+
+## TO-DO
+2. [x] Input image via device: should detect for new files being dropped into the folder.
+3. [x] Compare source image with our people in our S3 bucket `rekognition-people`
+4. [x] If match, fetch person data from image metadata
+  * maybe switch to database after the iOS project is done
+5. Do something:
   * [ ] Maybe play a entrance song?
   * [x] Maybe sing a birthday song if it's their bday?
-5. [ ] Pass Response from Step 4 to something(Polly?) and vocalise response
+6. [ ] Pass Response from Step 4 and vocalise response
+  * [x] Using AWS Polly to vocalise response
+  * [ ] Make vocalised response sound better with SSML?
 
 ## Some environment variables you may need
 ```

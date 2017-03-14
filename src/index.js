@@ -1,9 +1,7 @@
 require('dotenv').config();
-const Express = require('express');
 const AWS = require('aws-sdk');
 const fs = require('fs');
 const Birthday = require('../src/actions/birthday');
-const app = Express();
 const chokidar = require('chokidar');
 
 const port = process.env.PORT || 3000;
@@ -21,6 +19,8 @@ const fileWatcher = chokidar.watch(localDirectory, {
 });
 
 fileWatcher.on('add', function(filePath) {
+  console.log('new file added: ' + filePath);
+
   findAMatchInAwsFaces(getSourceImage(filePath)).then(function(match) {
     return getDataFromMatch(match);
   }).then(function(data) {
@@ -29,8 +29,6 @@ fileWatcher.on('add', function(filePath) {
     console.log(err);
   });
 });
-
-app.listen(port);
 
 function getSourceImage(filePath){
   return fs.readFileSync(
