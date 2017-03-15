@@ -9,6 +9,9 @@ function Polly() {
     region: 'us-east-1'
   });
 
+  // Using a child process as the Speaker module in Node crashed after speaking,
+  // I've looked everywhere, apparently there's no solution.
+  // Sadly, we'll just have to let it crash silently. :(
   const speaker = spawn('node', ['./src/speaker.js']);
 
   this.speak = function(text) {
