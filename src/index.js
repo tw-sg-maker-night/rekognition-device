@@ -4,6 +4,7 @@ const fs = require('fs');
 const chokidar = require('chokidar');
 
 const Polly = require('../src/polly');
+const TTSService = require('../src/tts_service');
 const Birthday = require('../src/actions/birthday');
 
 const port = process.env.PORT || 3000;
@@ -85,7 +86,7 @@ function actions(data) {
 
 function sing(response){
   if(response !== null) {
-    new Polly().speak(response);
+    new TTSService().request(response);
     console.log('singing: ' + response);
   }
 }

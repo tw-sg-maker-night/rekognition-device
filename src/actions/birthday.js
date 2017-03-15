@@ -19,8 +19,10 @@ function Birthday() {
     if(date === undefined || name === undefined)
       return null;
 
-    if(this.isBirthdayToday(date))
+    if(this.isBirthdayToday(date)) {
+      console.log('Birthday today!!');
       return this.getBirthdaySong(name);
+    }
 
     return null;
   }
