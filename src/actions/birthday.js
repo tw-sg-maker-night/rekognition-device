@@ -1,5 +1,5 @@
-var moment = require('moment-timezone');
-var momentTimezone = moment().tz("Asia/Singapore");
+let moment = require('moment-timezone');
+let momentTimezone = moment().tz("Asia/Singapore");
 
 function Birthday() {
   this.isBirthdayToday = function(date){
@@ -14,7 +14,7 @@ function Birthday() {
   }
 
   this.action = function(name, date) {
-    console.log("Birthday module called. Date: " + date + ", Name: " + name);
+    console.log("Birthday module called for "+ name + ", birthday: " + date);
 
     if(date === undefined || name === undefined)
       return null;
