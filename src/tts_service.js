@@ -1,9 +1,5 @@
 const fetch = require('node-fetch');
-const util = require('util');
 const fs = require('fs');
-const Stream = require('stream');
-const Speaker = require('speaker');
-const { spawn } = require('child_process');
 const player = require('play-sound')(opts = {})
 const uuid = require('uuid');
 
