@@ -4,28 +4,45 @@ const fs = require('fs');
 const Stream = require('stream');
 const Speaker = require('speaker');
 const { spawn } = require('child_process');
-const Sound = require('node-aplay');
-var play = require('play');
+const player = require('play-sound')(opts = {})
+const uuid = require('uuid');
+
+const voices = process.env.VOICES.split(",");
 
 function TTSService() {
-  this.request = function(text) {
-    console.log('here');
 
-    fetch('http://localhost:4000/speak', {
+  this.sing = function(text) {
+    let voice = randomVoice();
+
+    let options = {
       method: 'POST',
-      headers: {'Content-Type':'application/x-www-form-urlencoded'}, // this line is important, if this content-type is not set it wont work
-      body: 'text='+text+'&voice=Good'
-    }).then(function(res){
-        var songFile = fs.createWriteStream('temp.wav');
-        res.body.pipe(songFile);
+      headers: {'Content-Type':'application/x-www-form-urlencoded'},
+      body: 'text='+text+'&voice='+voice
+    }
 
-        songFile.on('finish', function() {
-          play.sound('temp.wav', function(){
-            console.log("completed");
-            fs.unlink('temp.wav');
-          });
-          console.log("after");
-        });
+    fetch(process.env.TTS_SERVICE_ENDPOINT, options).then(function(res){
+      play(res.body);
+      console.log('singing with ' + voice + 'voice');
+    });
+  }
+
+  function randomVoice() {
+    return voices[Math.floor(Math.random() * voices.length)];
+  }
+
+  function play(stream) {
+    let filePath = 'tts/' + uuid.v1() + '.wav';
+
+    let songFile = fs.createWriteStream(filePath);
+    stream.pipe(songFile);
+
+    songFile.on('finish', function() {
+      player.play(filePath, function(err){
+        if (err) console.log(err);
+
+        console.log("Finished singing. Removing " + filePath);
+        fs.unlink(filePath);
+      })
     });
   }
 }

@@ -1,3 +1,4 @@
 node_modules/
+tts/
 *.log
 .env

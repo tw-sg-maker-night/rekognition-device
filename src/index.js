@@ -86,8 +86,8 @@ function actions(data) {
 
 function sing(response){
   if(response !== null) {
-    new TTSService().request(response);
     console.log('singing: ' + response);
+    new TTSService().sing(response);
   }
 }
 
