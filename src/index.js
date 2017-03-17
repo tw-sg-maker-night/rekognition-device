@@ -18,7 +18,11 @@ const rekognition = new AWS.Rekognition();
 const s3 = new AWS.S3();
 
 const fileWatcher = chokidar.watch(localDirectory, {
-  ignoreInitial: true
+  ignoreInitial: true,
+  awaitWriteFinish: {
+    stabilityThreshold: 1000,
+    pollInterval: 100
+  }
 });
 
 fileWatcher.on('add', function(filePath) {
