@@ -1,3 +1,4 @@
+require('log-timestamp');
 let moment = require('moment-timezone');
 let momentTimezone = moment().tz("Asia/Singapore");
 

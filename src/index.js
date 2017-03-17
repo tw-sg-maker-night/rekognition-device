@@ -1,4 +1,6 @@
 require('dotenv').config();
+require('log-timestamp');
+
 const AWS = require('aws-sdk');
 const fs = require('fs');
 const chokidar = require('chokidar');
