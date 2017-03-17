@@ -5,7 +5,6 @@ const AWS = require('aws-sdk');
 const fs = require('fs');
 const chokidar = require('chokidar');
 
-const Polly = require('../src/polly');
 const TTSService = require('../src/tts_service');
 const Birthday = require('../src/actions/birthday');
 
