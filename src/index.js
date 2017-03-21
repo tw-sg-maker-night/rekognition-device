@@ -4,6 +4,8 @@ require('log-timestamp');
 const AWS = require('aws-sdk');
 const fs = require('fs');
 const chokidar = require('chokidar');
+const Faced = require('faced');
+const faceDetector = new Faced();
 
 const TTSService = require('../src/tts_service');
 const Birthday = require('../src/actions/birthday');
@@ -29,7 +31,10 @@ const fileWatcher = chokidar.watch(localDirectory, {
 fileWatcher.on('add', function(filePath) {
   console.log('new file added: ' + filePath);
 
-  findAMatchInAwsFaces(getSourceImage(filePath)).then(function(match) {
+  imageHasAFace(filePath)
+  .then(function(){
+    return findAMatchInAwsFaces(getSourceImage(filePath));
+  }).then(function(match) {
     return getDataFromMatch(match);
   }).then(function(data) {
     actions(data);
@@ -37,6 +42,17 @@ fileWatcher.on('add', function(filePath) {
     console.log(err);
   });
 });
+
+function imageHasAFace(filePath) {
+  return new Promise(function(resolve, reject){
+    faceDetector.detect(filePath, function (faces, image, filePath) {
+      if (faces.length > 0)
+        resolve();
+      else
+        reject('No face detected');
+    });
+  });
+}
 
 function getSourceImage(filePath){
   return fs.readFileSync(

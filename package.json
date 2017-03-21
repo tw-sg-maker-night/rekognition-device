@@ -22,6 +22,7 @@
     "aws-sdk": "^2.9.0",
     "chokidar": "^1.6.1",
     "dotenv": "^4.0.0",
+    "faced": "^1.2.0",
     "log-timestamp": "^0.1.2",
     "moment": "^2.17.1",
     "moment-timezone": "^0.5.11",
