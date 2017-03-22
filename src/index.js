@@ -19,6 +19,7 @@ const bucketName = process.env.AWS_BUCKET;
 AWS.config.update({region: process.env.AWS_REGION});
 const rekognition = new AWS.Rekognition();
 const s3 = new AWS.S3();
+const dynamoDB = new AWS.DynamoDB();
 
 const fileWatcher = chokidar.watch(localDirectory, {
   ignoreInitial: true,
@@ -88,6 +89,39 @@ function findAMatchInAwsFaces(sourceImage) {
 }
 
 function getDataFromMatch(matched){
+  return getDataFromAWSDynamoDB(matched);
+}
+
+function getDataFromAWSDynamoDB(matched) {
+  return new Promise(function(resolve, reject){
+    let params = {
+      Key: { 'userId': { S: matched.ExternalImageId } },
+      TableName: 'HeyOfficeUsers'
+    };
+    dynamoDB.getItem(params, function(err, data){
+      if(err) reject(err, err.stack);
+      else {
+        console.log(data);
+        resolve(processAWSDynamoDBResponseObject(data));
+      }
+    });
+  });
+}
+
+function processAWSDynamoDBResponseObject(response) {
+  let item = response.Item;
+  let keys = Object.keys(item);
+  let data = {};
+  keys.forEach(function(key) {
+    let columnTypeKey = Object.keys(item[key])[0];
+    let value = item[key][columnTypeKey];
+    data[key] = value;
+  });
+  console.log(data);
+  return data;
+}
+
+function getDataFromAWSS3(matched){
   return new Promise(function(resolve, reject){
     let params = {
       Bucket: bucketName,
