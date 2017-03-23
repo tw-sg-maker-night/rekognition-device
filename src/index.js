@@ -7,7 +7,8 @@ const chokidar = require('chokidar');
 const Faced = require('faced');
 const faceDetector = new Faced();
 
-const TTSService = require('../src/tts_service');
+const TTSService = require('../src/services/tts_service');
+const AWSDynamoDBService = require('../src/services/AWSDynamoDBService');
 const Birthday = require('../src/actions/birthday');
 
 const port = process.env.PORT || 3000;
@@ -17,9 +18,9 @@ const localDirectory = process.env.LOCAL_DIRECTORY;
 const bucketName = process.env.AWS_BUCKET;
 
 AWS.config.update({region: process.env.AWS_REGION});
+
 const rekognition = new AWS.Rekognition();
-const s3 = new AWS.S3();
-const dynamoDB = new AWS.DynamoDB();
+const dynamoDB = new AWSDynamoDBService(AWS);
 
 const fileWatcher = chokidar.watch(localDirectory, {
   ignoreInitial: true,
@@ -89,50 +90,7 @@ function findAMatchInAwsFaces(sourceImage) {
 }
 
 function getDataFromMatch(matched){
-  return getDataFromAWSDynamoDB(matched);
-}
-
-function getDataFromAWSDynamoDB(matched) {
-  return new Promise(function(resolve, reject){
-    let params = {
-      Key: { 'userId': { S: matched.ExternalImageId } },
-      TableName: 'HeyOfficeUsers'
-    };
-    dynamoDB.getItem(params, function(err, data){
-      if(err) reject(err, err.stack);
-      else {
-        console.log(data);
-        resolve(processAWSDynamoDBResponseObject(data));
-      }
-    });
-  });
-}
-
-function processAWSDynamoDBResponseObject(response) {
-  let item = response.Item;
-  let keys = Object.keys(item);
-  let data = {};
-  keys.forEach(function(key) {
-    let columnTypeKey = Object.keys(item[key])[0];
-    let value = item[key][columnTypeKey];
-    data[key] = value;
-  });
-  console.log(data);
-  return data;
-}
-
-function getDataFromAWSS3(matched){
-  return new Promise(function(resolve, reject){
-    let params = {
-      Bucket: bucketName,
-      Key: matched.ExternalImageId
-    };
-
-    s3.headObject(params, function(err, data) {
-      if (err) reject(err);
-      else resolve(data.Metadata);
-    });
-  });
+  return dynamoDB.getData(matched);
 }
 
 function actions(data) {
