@@ -30,7 +30,7 @@
 
 ### Text to Speech Service
 * Synthesize text into Speech (only runs on MacOSX)
-  * Refer to [sayserver github](https://github.com/tw-sg-maker-night/sayserver)
+  * Refer to [sayserver github](https://github.com/tw-sg-maker-night/tts-server)
   * Voices can specified in .env file
 
 
@@ -51,7 +51,7 @@
 
 ## Get Started
 1. npm start
-2. drop an image to the folder
+2. drop an image to the folder to trigger process
 
 
 ## AWS CLI Commands to manage Faces
