@@ -13,7 +13,8 @@
 
 * Do an action:
   * [x] Maybe sing a birthday song if it's their birthday?
-  * [ ] Maybe play a entrance song?
+  * [x] Maybe greet the person(e.g. good morning) by default? Meaning if no other actions are triggered
+  * [ ] Maybe something else?
 
 * Pass Response from the action and vocalise the response
   * [x] Using the TTS Service (refer to [Dependencies](#text-to-speech-service))
@@ -86,3 +87,4 @@ Doesn't seem like there's a way to do it via the AWS Management (or maybe I can'
 
 ## Notes
 AWS BUCKET: rekognition-people
+AWS REKOGNITION COLLECTION: rekognition-people

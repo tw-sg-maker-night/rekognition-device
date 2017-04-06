@@ -10,6 +10,7 @@ const faceDetector = new Faced();
 const TTSService = require('../src/services/tts_service');
 const AWSDynamoDBService = require('../src/services/AWSDynamoDBService');
 const Birthday = require('../src/actions/birthday');
+const Greeting = require('../src/actions/greeting');
 
 const port = process.env.PORT || 3000;
 const collectionId = process.env.AWS_COLLECTION_ID;
@@ -94,16 +95,25 @@ function getDataFromMatch(matched){
 }
 
 function actions(data) {
-  sing(birthdaySongOnBirthday(data.name, data.birthday));
+  let name = data.name;
+
+  if(sing(birthdaySongOnBirthday(name, data.birthday))) return;
+
+  sing(greetings(name));
 }
 
 function sing(response){
   if(response !== null) {
     console.log('singing: ' + response);
     new TTSService().sing(response);
+    return true;
   }
 }
 
 function birthdaySongOnBirthday(name, birthday){
   return new Birthday().action(name, birthday);
+}
+
+function greetings(name){
+  return new Greeting().action(name);
 }
